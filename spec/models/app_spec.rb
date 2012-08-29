@@ -147,7 +147,7 @@ describe App do
     before do
       @xml = Rails.root.join('spec','fixtures','hoptoad_test_notice.xml').read
       @app = Fabricate(:app, :api_key => 'APIKEY')
-      ErrorReport.any_instance.stub(:fingerprint).and_return('fingerprintdigest')
+      Fingerprint.stub(:generate).and_return('fingerprintdigest')
     end
 
     it 'finds the correct app' do

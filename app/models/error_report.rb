@@ -1,4 +1,3 @@
-require 'digest/md5'
 require 'hoptoad_notifier'
 
 class ErrorReport
@@ -7,14 +6,6 @@ class ErrorReport
   def initialize(xml_or_attributes)
     @attributes = (xml_or_attributes.is_a?(String) ? Hoptoad.parse_xml!(xml_or_attributes) : xml_or_attributes).with_indifferent_access
     @attributes.each{|k, v| instance_variable_set(:"@#{k}", v) }
-  end
-
-  def fingerprint
-    normalized_backtrace = backtrace[0...3].map do |trace|
-      trace.merge 'method' => trace['method'].gsub(/[0-9_]{10,}+/, "__FRAGMENT__")
-    end
-
-    @fingerprint ||= Digest::MD5.hexdigest(normalized_backtrace.to_s)
   end
 
   def rails_env
@@ -42,16 +33,17 @@ class ErrorReport
       :server_environment => server_environment,
       :notifier => notifier,
       :user_attributes => user_attributes)
-
+    
+    fingerprint = Fingerprint.generate(notice)
+    
     err = app.find_or_create_err!(
       :error_class => error_class,
       :component => component,
       :action => action,
       :environment => rails_env,
       :fingerprint => fingerprint)
-
+    
     err.notices << notice
     notice
   end
 end
-
