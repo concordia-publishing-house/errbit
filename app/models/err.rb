@@ -18,9 +18,6 @@ class Err
 
   has_many :notices, :inverse_of => :err, :dependent => :destroy
 
-  validates_presence_of :error_class, :environment
-
   delegate :app, :resolved?, :to => :problem
 
 end
-

@@ -20,8 +20,8 @@ class Problem
   field :error_class
   field :where
   field :user_agents, :type => Hash, :default => {}
-  field :messages,    :type => Hash, :default => {}
-  field :hosts,       :type => Hash, :default => {}
+  field :messages, :type => Hash, :default => {}
+  field :hosts, :type => Hash, :default => {}
   field :comments_count, :type => Integer, :default => 0
 
   index :app_id
@@ -34,6 +34,8 @@ class Problem
   belongs_to :app
   has_many :errs, :inverse_of => :problem, :dependent => :destroy
   has_many :comments, :inverse_of => :err, :dependent => :destroy
+
+  validates_presence_of :error_class, :environment
 
   before_create :cache_app_attributes
 
@@ -81,11 +83,12 @@ class Problem
   end
 
   def unmerge!
+    attrs = {:error_class => error_class, :environment => environment}
     problem_errs = errs.to_a
     problem_errs.shift
     [self] + problem_errs.map(&:id).map do |err_id|
       err = Err.find(err_id)
-      app.problems.create.tap do |new_problem|
+      app.problems.create(attrs).tap do |new_problem|
         err.update_attribute(:problem_id, new_problem.id)
         new_problem.reset_cached_attributes
       end
@@ -127,10 +130,8 @@ class Problem
     notice ||= notices.first
     attrs = {:last_notice_at => notices.order_by([:created_at, :asc]).last.try(:created_at)}
     attrs.merge!(
-      :message => notice.message,
-      :environment => notice.environment_name,
-      :error_class => notice.error_class,
-      :where => notice.where,
+      :message     => notice.message,
+      :where       => notice.where,
       :messages    => attribute_count_increase(:messages, notice.message),
       :hosts       => attribute_count_increase(:hosts, notice.host),
       :user_agents => attribute_count_increase(:user_agents, notice.user_agent_string)

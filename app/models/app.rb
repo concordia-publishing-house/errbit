@@ -75,7 +75,7 @@ class App
 
   def find_or_create_err!(attrs)
     Err.any_in(:problem_id => problems.map { |a| a.id }).
-        where(attrs).first || problems.create!.errs.create!(attrs)
+        where(attrs).first || problems.create!(attrs.slice(:error_class, :environment)).errs.create!(attrs)
   end
 
   # Mongoid Bug: find(id) on association proxies returns an Enumerator
