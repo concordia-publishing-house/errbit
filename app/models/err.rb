@@ -6,17 +6,15 @@ class Err
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  field :error_class
-  field :component
-  field :action
-  field :environment
   field :fingerprint
 
-  belongs_to :problem
   index :problem_id
-  index :error_class
+  index :fingerprint
 
+  belongs_to :problem
   has_many :notices, :inverse_of => :err, :dependent => :destroy
+
+  validates_presence_of :problem_id, :fingerprint
 
   delegate :app, :resolved?, :to => :problem
 

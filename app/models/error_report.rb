@@ -8,18 +8,6 @@ class ErrorReport
     @attributes.each{|k, v| instance_variable_set(:"@#{k}", v) }
   end
 
-  def rails_env
-    server_environment['environment-name'] || 'development'
-  end
-
-  def component
-    request['component'] || 'unknown'
-  end
-
-  def action
-    request['action']
-  end
-
   def app
     @app ||= App.find_by_api_key!(api_key)
   end
@@ -38,11 +26,8 @@ class ErrorReport
     
     err = app.find_or_create_err!(
       :error_class => error_class,
-      :component => component,
-      :action => action,
-      :environment => rails_env,
+      :environment => notice.environment_name || 'development',
       :fingerprint => fingerprint)
-    
     err.notices << notice
     notice
   end

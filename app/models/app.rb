@@ -73,9 +73,16 @@ class App
     report.generate_notice!
   end
 
+  # Acceps a hash with the following attributes:
+  #
+  # * <tt>:error_class</tt> - the class of error (required to create a new Problem)
+  # * <tt>:environment</tt> - the environment the source app was running in (required to create a new Problem)
+  # * <tt>:fingerprint</tt> - a unique value identifying the notice
+  #
   def find_or_create_err!(attrs)
+    fingerprint = attrs.delete(:fingerprint)
     Err.any_in(:problem_id => problems.map { |a| a.id }).
-        where(attrs).first || problems.create!(attrs.slice(:error_class, :environment)).errs.create!(attrs)
+        where({:fingerprint => fingerprint}).first || problems.create!(attrs).errs.create!({:fingerprint => fingerprint})
   end
 
   # Mongoid Bug: find(id) on association proxies returns an Enumerator

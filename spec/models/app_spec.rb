@@ -116,17 +116,17 @@ describe App do
   context '#find_or_create_err!' do
     before do
       @app = Fabricate(:app)
+      @fingerprint = 'fingerprintdigest'
       @conditions = {
-        :error_class  => 'Whoops',
-        :component    => 'Foo',
-        :action       => 'bar',
-        :environment  => 'production'
+        :error_class => 'Whoops',
+        :environment => 'production',
+        :fingerprint => @fingerprint
       }
     end
 
     it 'returns the correct err if one already exists' do
-      existing = Fabricate(:err, @conditions.merge(:problem => Fabricate(:problem, :app => @app)))
-      Err.where(@conditions).first.should == existing
+      existing = Fabricate(:err, :fingerprint => @fingerprint, :problem => Fabricate(:problem, :app => @app))
+      Err.where(:fingerprint => @fingerprint).first.should == existing
       @app.find_or_create_err!(@conditions).should == existing
     end
 
@@ -135,7 +135,7 @@ describe App do
     end
 
     it 'creates a new problem if a matching one does not already exist' do
-      Err.where(@conditions).first.should be_nil
+      Err.where(:fingerprint => @fingerprint).first.should be_nil
       lambda {
         @app.find_or_create_err!(@conditions)
       }.should change(Problem,:count).by(1)
@@ -158,11 +158,9 @@ describe App do
     it 'finds the correct err for the notice' do
       App.should_receive(:find_by_api_key!).and_return(@app)
       @app.should_receive(:find_or_create_err!).with({
-        :error_class  => 'HoptoadTestingException',
-        :component    => 'application',
-        :action       => 'verify',
-        :environment  => 'development',
-        :fingerprint  => 'fingerprintdigest'
+        :error_class => 'HoptoadTestingException',
+        :environment => 'development',
+        :fingerprint => 'fingerprintdigest'
       }).and_return(err = Fabricate(:err))
       err.notices.stub(:create!)
       @notice = App.report_error!(@xml)
@@ -171,11 +169,9 @@ describe App do
     it 'marks the err as unresolved if it was previously resolved' do
       App.should_receive(:find_by_api_key!).and_return(@app)
       @app.should_receive(:find_or_create_err!).with({
-        :error_class  => 'HoptoadTestingException',
-        :component    => 'application',
-        :action       => 'verify',
-        :environment  => 'development',
-        :fingerprint  => 'fingerprintdigest'
+        :error_class => 'HoptoadTestingException',
+        :environment => 'development',
+        :fingerprint => 'fingerprintdigest'
       }).and_return(err = Fabricate(:err, :problem => Fabricate(:problem, :resolved => true)))
       err.should be_resolved
       @notice = App.report_error!(@xml)
