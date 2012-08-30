@@ -116,6 +116,22 @@ describe Problem do
         merged_problem.reload.errs.length.should == 2
       }.should change(Problem, :count).by(-1)
     end
+    
+    it "should still work even if the errs are invalid" do
+      problem1 = Fabricate(:err).problem
+      problem2 = Fabricate(:err).problem
+      problem1.errs.length.should == 1
+      problem2.errs.length.should == 1
+      
+      invalid_err = problem2.errs.first
+      invalid_err.update_attribute(:error_class, nil)
+      invalid_err.should_not be_valid
+
+      lambda {
+        merged_problem = Problem.merge!(problem1, problem2)
+        merged_problem.reload.errs.length.should == 2
+      }.should change(Problem, :count).by(-1)
+    end
   end
 
 

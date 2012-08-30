@@ -68,7 +68,9 @@ class Problem
     problems = problems.flatten.uniq
     merged_problem = problems.shift
     problems.each do |problem|
-      merged_problem.errs.concat Err.where(:problem_id => problem.id)
+      problem.errs.each do |err|
+        err.update_attribute(:problem_id, merged_problem.id)
+      end
       problem.errs(true) # reload problem.errs (should be empty) before problem.destroy
       problem.destroy
     end
