@@ -89,7 +89,7 @@ gem 'flowdock'
 # Authentication
 # ---------------------------------------
 # GitHub OAuth
-gem 'omniauth-github'
+gem 'omniauth-github', "1.2.0"
 
 gem 'ri_cal'
 gem 'oj'
