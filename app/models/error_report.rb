@@ -15,7 +15,7 @@ require "hoptoad_notifier"
 # * <tt>:notifier</tt> - information to identify the source of the error report
 #
 class ErrorReport
-  attr_reader :error_class, :message, :request, :server_environment, :api_key, :notifier, :user_attributes, :framework
+  attr_reader :api_key, :error_class, :framework, :message, :notifier, :request, :server_environment, :user_attributes
 
   def initialize(xml_or_attributes)
     @attributes = (xml_or_attributes.is_a?(String) ? Hoptoad.parse_xml!(xml_or_attributes) : xml_or_attributes).with_indifferent_access
@@ -67,6 +67,7 @@ class ErrorReport
       fingerprint: fingerprint
     )
   end
+  delegate :problem, to: :error
 
   def valid?
     !!app
