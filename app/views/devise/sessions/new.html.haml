@@ -4,7 +4,7 @@
 - if Errbit::Config.github_authentication
   - content_for :action_bar do
     %div.action-bar
-      %span.github= link_to "Sign in with GitHub", user_omniauth_authorize_path(:github)
+      %span.github= link_to "Sign in with GitHub", user_github_omniauth_authorize_path
 
 = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
   .required
@@ -30,4 +30,3 @@
     location.href = $(this).attr('href') + "?email=" + $('#user_#{auth_key}').val();
     return false;
   });
-
