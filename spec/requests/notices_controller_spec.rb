@@ -40,7 +40,7 @@ describe "Notices management" do
           expect(response.body).to eq "Your API key is unknown"
         }.to_not change {
           errbit_app.problems.count
-        }.by(1)
+        }
       end
 
     end

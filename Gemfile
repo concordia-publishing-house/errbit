@@ -30,6 +30,7 @@ gem 'rack-utf8_sanitizer', require: 'rack/utf8_sanitizer'
 gem "paranoia", "~> 2.0"
 gem 'useragent'
 gem 'decent_exposure'
+gem 'mail', '2.6.6'
 gem 'actionmailer_inline_css'
 gem 'kaminari', '>= 0.14.1'
 gem 'rack-ssl-enforcer', require: false
@@ -99,7 +100,9 @@ gem 'multi_json'
 gem 'rake', '~> 11.2'
 
 group :development, :test do
-  gem 'rspec-rails', '~> 2.0'
+  gem 'rspec-rails', '~> 3.1'
+  gem 'rspec-its'
+  gem 'rspec-activemodel-mocks'
   gem 'webmock', require: false
   gem 'airbrake', require: false
   gem 'pry-rails'
@@ -125,7 +128,7 @@ group :test do
   gem 'capybara'
   gem 'launchy'
   gem 'database_cleaner'
-  gem 'email_spec'
+  gem 'email_spec', '~> 1.5.0'
   gem 'timecop'
   gem 'test_after_commit'
   gem 'coveralls', require: false

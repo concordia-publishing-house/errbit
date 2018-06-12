@@ -9,16 +9,13 @@ describe IssueTrackers::RedmineTracker do
     @issue_link = "#{tracker.account}/issues/#{number}.xml?project_id=#{tracker.project_id}"
     body = "<issue><subject>my subject</subject><id>#{number}</id></issue>"
 
-    # Build base url with account URL, and username/password basic auth
-    base_url = tracker.account.gsub 'http://', "http://#{tracker.username}:#{tracker.password}@"
-
-    stub_request(:post, "#{base_url}/issues.xml").
+    stub_request(:post, "#{tracker.account}/issues.xml").
                  to_return(status: 201, headers: {'Location' => @issue_link}, body: body )
 
     problem.app.issue_tracker.create_issue(problem)
     problem.reload
 
-    requested = have_requested(:post, "#{base_url}/issues.xml")
+    requested = have_requested(:post, "#{tracker.account}/issues.xml")
     expect(WebMock).to requested.with(headers: {'X-Redmine-API-Key' => tracker.api_token})
     expect(WebMock).to requested.with(body: /<project-id>#{tracker.project_id}<\/project-id>/)
     expect(WebMock).to requested.with(body: /<subject>\[#{ problem.environment }\]\[#{problem.where}\] #{problem.message.to_s.truncate(100)}<\/subject>/)

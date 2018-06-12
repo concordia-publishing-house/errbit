@@ -14,7 +14,7 @@ describe Mailer do
         asset_host: "http://example.com",
         notify_all_users: true
       )
-      notice.stub(:similar_count).and_return(3)
+      allow(notice).to receive(:similar_count).and_return(3)
 
       @email = Mailer.err_notification(notice).deliver_now
     end
@@ -57,7 +57,7 @@ describe Mailer do
     let(:recipients) { ['recipient@example.com', 'another@example.com'] }
 
     before do
-      comment.stub(:notification_recipients).and_return(recipients)
+      allow(comment).to receive(:notification_recipients).and_return(recipients)
       Fabricate(:notice, err: notice.err)
       @email = Mailer.comment_notification(comment).deliver_now
     end

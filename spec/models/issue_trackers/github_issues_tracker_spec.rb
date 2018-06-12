@@ -25,23 +25,17 @@ describe IssueTrackers::GithubIssuesTracker do
 }
 EOF
 
-    stub_request(:post,
-                 "https://#{tracker.username}:#{tracker.password}@api.github.com/repos/#{repo}/issues").
-      to_return(status: 201,
-                headers: {
-        'Location' => @issue_link,
-        'Content-Type' => 'application/json',
-      },
-                body: body )
+    stub_request(:post, "https://api.github.com/repos/#{repo}/issues").
+      with( headers: { 'Accept'=>'application/vnd.github.v3+json' } ).
+      to_return( status: 201, headers: { 'Location' => @issue_link, 'Content-Type' => 'application/json' }, body: body )
 
     problem.app.issue_tracker.create_issue(problem)
     problem.reload
 
-    requested = have_requested(:post, "https://#{tracker.username}:#{tracker.password}@api.github.com/repos/#{repo}/issues")
+    requested = have_requested(:post, "https://api.github.com/repos/#{repo}/issues")
     expect(WebMock).to requested.with(body: /[production][foo#bar] FooError: Too Much Bar/)
     expect(WebMock).to requested.with(body: /See this exception on Errbit/)
 
     expect(problem.issue_link).to eq @issue_link
   end
 end
-
