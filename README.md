@@ -131,13 +131,21 @@ gem install bundler
 bundle install
 ```
 
-  * Bootstrap Errbit. This will copy over config.yml and also seed the database.
+  * Bootstrap Errbit. This will copy over config.yml
 
 ```bash
-rake errbit:bootstrap
+rake errbit:copy_configs
 ```
 
   * Update the config.yml and database.yml files with information about your environment
+
+  * Create and seed the database
+
+  ```bash
+  rake db:create
+  rake db:migrate
+  rake db:seed
+  ```
 
   * Start Server
 
