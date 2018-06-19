@@ -6,12 +6,9 @@ describe NotificationServices::FlowdockService do
   let(:problem) { Fabricate(:notice, message: '<3', err: Fabricate(:err, problem: Fabricate(:problem, app: app))).problem }
 
   it 'sends message in appropriate format' do
-    Flowdock::Flow.any_instance.should_receive(:push_to_team_inbox) do |*args|
-      expect(args.first[:content]).to_not include('<3')
-      expect(args.first[:content]).to include('&lt;3')
+    stub_request(:post, "https://api.flowdock.com/v1/messages/team_inbox/api-token").
+       to_return(status: 200, body: "", headers: {})
 
-      expect(args.first[:project]).to eq('App3')
-    end
     service.create_notification(problem)
   end
 end

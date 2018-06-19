@@ -145,7 +145,7 @@ describe Api::V1::ProblemsController do
 
     describe "PUT /api/v1/problems/:id/resolve" do
       it "should resolve the given problem" do
-        controller.stub(:problem).and_return(problem)
+        allow(controller).to receive(:problem).and_return(problem)
         expect(problem).to receive(:resolve!)
         put :resolve, id: err.id, auth_token: @user.authentication_token
         expect(response).to be_success
@@ -158,7 +158,7 @@ describe Api::V1::ProblemsController do
 
       describe "when supplied a message" do
         it "should create a comment and resolve the problem" do
-          controller.stub(:problem).and_return(problem)
+          allow(controller).to receive(:problem).and_return(problem)
           expect(problem).to receive(:resolve!)
           put :resolve, id: err.id, auth_token: @user.authentication_token, message: "Resolved by the Test Suite"
           expect(response).to be_success
@@ -167,7 +167,7 @@ describe Api::V1::ProblemsController do
 
         it "should not create a comment if the problem is already resolved" do
           problem.resolve!
-          controller.stub(:problem).and_return(problem)
+          allow(controller).to receive(:problem).and_return(problem)
           put :resolve, id: err.id, auth_token: @user.authentication_token, message: "Resolved by the Test Suite"
           expect(response).to be_success
           expect(err.comments.count).to eq(0)
@@ -179,7 +179,7 @@ describe Api::V1::ProblemsController do
 
     describe "PUT /api/v1/problems/:id/unresolve" do
       it "should unresolve the given problem" do
-        controller.stub(:problem).and_return(problem)
+        allow(controller).to receive(:problem).and_return(problem)
         expect(problem).to receive(:unresolve!)
         put :unresolve, id: err.id, auth_token: @user.authentication_token
         expect(response).to be_success

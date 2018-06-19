@@ -14,10 +14,9 @@
       # -------------------------------------------------------
 
       Airbrake.configure do |config|
-        config.api_key = '#{app.api_key}'
-        config.host    = '#{request.host}'
-        config.port    = #{request.port}
-        config.secure  = config.port == 443
+        config.project_id = 1
+        config.project_key = '#{app.api_key}'
+        config.host    = '#{request.base_url}'
       end
 
       # Set up Javascript notifications
@@ -35,4 +34,3 @@
       # Run:
       # rake airbrake:test
       # refresh this page
-

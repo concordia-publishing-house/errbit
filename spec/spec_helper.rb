@@ -37,14 +37,14 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 
   config.mock_with :rspec
-  config.include Devise::TestHelpers, type: :controller
-  config.filter_run focused: true
+  config.include Devise::Test::ControllerHelpers, type: :controller
+  config.filter_run focus: true
   config.run_all_when_everything_filtered = true
   config.alias_example_to :fit, focused: true
   config.use_transactional_fixtures = true
   config.filter_run_excluding skip: true
   config.formatter = :documentation
-  config.color_enabled = true
+  config.color = true
 
   DatabaseCleaner[:active_record].strategy = :truncation
   DatabaseCleaner.clean

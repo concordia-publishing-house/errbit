@@ -18,6 +18,6 @@ describe NotificationServices::WebhookService do
 
     expect(HTTParty).to receive(:post).with(notification_service.api_token, body: {problem: problem.to_json}).and_raise(SocketError)
 
-    expect {notification_service.create_notification(problem)}.to_not raise_error(SocketError)
+    expect {notification_service.create_notification(problem)}.to_not raise_error
   end
 end
