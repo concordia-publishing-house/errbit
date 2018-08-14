@@ -50,10 +50,8 @@ gem 'bson_ext', require: false
 
 # Issue Trackers
 # ---------------------------------------
-# Lighthouse
-gem 'lighthouse-api'
-# Redmine
-gem 'oruen_redmine_client', require: 'redmine_client'
+# Used by Mingle and Unfuddle
+gem 'activeresource', '~> 4.0.0'
 # Pivotal Tracker
 gem 'pivotal-tracker'
 # Fogbugz

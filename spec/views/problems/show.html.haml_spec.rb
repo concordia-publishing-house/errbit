@@ -98,9 +98,9 @@ describe "problems/show.html.haml" do
 
       end
 
-      context "with lighthouse tracker on app" do
+      context "with pivotal_labs tracker on app" do
         let(:app) { Fabricate :app, issue_tracker: tracker }
-        let(:tracker) { Fabricate :lighthouse_tracker }
+        let(:tracker) { Fabricate :pivotal_labs_tracker }
         context "with problem without issue link" do
           let(:problem) { Fabricate(:err, problem: Fabricate(:problem, app: app)).problem }
           it 'not see link if no issue tracker' do
@@ -165,4 +165,3 @@ describe "problems/show.html.haml" do
     end
   end
 end
-

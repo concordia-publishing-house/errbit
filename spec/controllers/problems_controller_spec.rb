@@ -246,17 +246,22 @@ describe ProblemsController do
     end
 
     context "successful issue creation" do
-      context "lighthouseapp tracker" do
+      context "fogbugz tracker" do
         let(:notice) { Fabricate :notice }
-        let(:tracker) { Fabricate :lighthouse_tracker, app: notice.app }
+        let(:tracker) { Fabricate :fogbugz_tracker, app: notice.app }
         let(:err) { notice.err }
 
         before(:each) do
           number = 5
           @issue_link = "http://#{tracker.account}.lighthouseapp.com/projects/#{tracker.project_id}/tickets/#{number}.xml"
           body = "<ticket><number type=\"integer\">#{number}</number></ticket>"
-          stub_request(:post, "http://#{tracker.account}.lighthouseapp.com/projects/#{tracker.project_id}/tickets.xml").
-                       to_return(status: 201, headers: {'Location' => @issue_link}, body: body )
+          stub_request(:get, "https://#{tracker.account}.fogbugz.com/api.asp?cmd=logon&email=johnsoda&password=password").
+            with(headers: {
+             "Accept"=>"*/*",
+             "Accept-Encoding"=>"gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+             "Content-Type"=>"text/xml",
+             "User-Agent"=>"Ruby" }).
+            to_return(status: 200, body: "", headers: {})
 
           post :create_issue, app_id: err.app.id, id: err.id
         end
@@ -284,12 +289,18 @@ describe ProblemsController do
     end
 
     context "error during request to a tracker" do
-      context "lighthouseapp tracker" do
-        let(:tracker) { Fabricate :lighthouse_tracker }
+      context "fogbugz tracker" do
+        let(:tracker) { Fabricate :fogbugz_tracker }
         let(:err) { Fabricate(:err, problem: Fabricate(:problem, app: tracker.app)) }
 
         before(:each) do
-          stub_request(:post, "http://#{tracker.account}.lighthouseapp.com/projects/#{tracker.project_id}/tickets.xml").to_return(status: 500)
+          stub_request(:get, "https://#{tracker.account}.fogbugz.com/api.asp?cmd=logon&email=johnsoda&password=password").
+            with(headers: {
+             "Accept"=>"*/*",
+             "Accept-Encoding"=>"gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+             "Content-Type"=>"text/xml",
+             "User-Agent"=>"Ruby" }).
+            to_return(status: 500)
 
           post :create_issue, app_id: err.app.id, id: err.id
         end

@@ -172,9 +172,6 @@ GEM
     launchy (2.4.3)
       addressable (~> 2.3)
     libv8 (3.16.14.19)
-    lighthouse-api (2.0)
-      activeresource (>= 3.0.0)
-      activesupport (>= 3.0.0)
     loofah (2.2.2)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -225,8 +222,6 @@ GEM
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
     orm_adapter (0.5.0)
-    oruen_redmine_client (0.0.1)
-      activeresource (>= 2.3.0)
     paranoia (2.1.3)
       activerecord (~> 4.0)
     pg (0.18.2)
@@ -280,8 +275,8 @@ GEM
       rails-deprecated_sanitizer (>= 1.0.1)
     rails-html-sanitizer (1.0.4)
       loofah (~> 2.2, >= 2.2.2)
-    rails-observers (0.1.2)
-      activemodel (~> 4.0)
+    rails-observers (0.1.5)
+      activemodel (>= 4.0)
     rails_autolink (1.1.4)
       rails (> 3.1)
     railties (4.2.10)
@@ -396,6 +391,7 @@ PLATFORMS
 
 DEPENDENCIES
   actionmailer_inline_css
+  activeresource (~> 4.0.0)
   airbrake
   better_errors
   binding_of_caller
@@ -425,7 +421,6 @@ DEPENDENCIES
   jquery-rails
   kaminari (>= 0.14.1)
   launchy
-  lighthouse-api
   mail (= 2.6.6)
   meta_request
   mongo
@@ -433,7 +428,6 @@ DEPENDENCIES
   octokit
   oj
   omniauth-github (= 1.2.0)
-  oruen_redmine_client
   paranoia (~> 2.0)
   pg
   pivotal-tracker
@@ -467,4 +461,4 @@ DEPENDENCIES
   xmpp4r
 
 BUNDLED WITH
-   1.16.1
+   1.16.3
