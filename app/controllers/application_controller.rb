@@ -16,17 +16,6 @@ class ApplicationController < ActionController::Base
 
   rescue_from ActionController::RedirectBackError, with: :redirect_to_root
 
-  class StrongParametersWithEagerAttributesStrategy < DecentExposure::StrongParametersStrategy
-    def attributes
-      super
-      @attributes ||= params[inflector.param_key] ? params[inflector.param_key].permit! : {}
-    end
-  end
-
-  decent_configuration do
-    strategy StrongParametersWithEagerAttributesStrategy
-  end
-
 protected
 
 

@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   before_filter :require_admin!, except: [:edit, :update]
   before_filter :require_user_edit_priviledges, only: [:edit, :update]
 
-  expose(:user, attributes: :user_params)
+  expose(:user)
   expose(:users) {
     User.page(params[:page]).per(current_user.per_page)
   }
@@ -74,4 +74,3 @@ class UsersController < ApplicationController
   end
 
 end
-

@@ -15,7 +15,7 @@ class AppsController < ApplicationController
     app_scope.all.sort.to_a
   }
 
-  expose(:app, ancestor: :app_scope)
+  expose(:app, scope: -> { app_scope })
 
   expose(:all_errs) {
     !!params[:all_errs]
@@ -59,7 +59,7 @@ class AppsController < ApplicationController
   def update
     initialize_subclassed_issue_tracker
     initialize_subclassed_notification_service
-    if app.save
+    if app.update_attributes(app_params)
       redirect_to app_url(app), flash: { success: I18n.t('controllers.apps.flash.update.success') }
     else
       flash[:error] = I18n.t('controllers.apps.flash.update.error')
@@ -86,6 +86,10 @@ class AppsController < ApplicationController
   end
 
   protected
+
+    def app_params
+      params.fetch(:app, {}).permit!
+    end
 
     def initialize_subclassed_issue_tracker
       # set the app's issue tracker
