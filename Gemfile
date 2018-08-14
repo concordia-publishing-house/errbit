@@ -12,9 +12,7 @@ gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .js.coffee assets and views
 gem 'coffee-rails', '~> 4.0.0'
 
-# We can't upgrade because not compatible to jquery >= 1.9.
-# To do that, we need fix the rails.js
-gem 'jquery-rails', '~> 2.1.4'
+gem 'jquery-rails'
 gem 'pjax_rails'
 gem 'underscore-rails'
 
