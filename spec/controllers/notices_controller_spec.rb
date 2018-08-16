@@ -16,8 +16,7 @@ describe NoticesController do
 
       context "with xml pass in raw_port" do
         before do
-          expect(request).to receive(:raw_post).and_return(xml)
-          post :create, format: :xml
+          post :create, body: xml, format: :xml
         end
 
         it "generates a notice from raw xml [POST]" do
@@ -81,4 +80,3 @@ describe NoticesController do
   end
 
 end
-

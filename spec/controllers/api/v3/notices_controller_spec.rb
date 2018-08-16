@@ -1,4 +1,6 @@
-describe Api::V3::NoticesController, type: :controller do
+require 'spec_helper'
+
+describe Api::V3::NoticesController do
   let(:app) { Fabricate(:app) }
   let(:project_id) { app.api_key }
   let(:legit_params) { { project_id: project_id, key: project_id } }
@@ -19,7 +21,7 @@ describe Api::V3::NoticesController, type: :controller do
   end
 
   it "returns created notice id in json format" do
-    post :create, legit_body, legit_params
+    post :create, body: legit_body, params: legit_params
     notice = Notice.last
     expect(JSON.parse(response.body)).to eq(
       "id"  => notice.id.to_s,
@@ -32,25 +34,25 @@ describe Api::V3::NoticesController, type: :controller do
   end
 
   it "responds with 201 created on success" do
-    post :create, legit_body, legit_params
+    post :create, body: legit_body, params: legit_params
     expect(response.status).to be(201)
   end
 
   it "responds with 201 created on success with token in Airbrake Token header" do
     request.headers["X-Airbrake-Token"] = project_id
-    post :create, legit_body, project_id: 123
+    post :create, body: legit_body, params: { project_id: 123 }
     expect(response.status).to be(201)
   end
 
   it "responds with 201 created on success with token in Authorization header" do
     request.headers["Authorization"] = "Bearer #{project_id}"
-    post :create, legit_body, project_id: 123
+    post :create, body: legit_body, params: { project_id: 123 }
     expect(response.status).to be(201)
   end
 
   it "responds with 422 when Authorization header is not valid" do
     request.headers["Authorization"] = "incorrect"
-    post :create, legit_body, project_id: 123
+    post :create, body: legit_body, params: { project_id: 123 }
     expect(response.status).to be(422)
   end
 
@@ -63,7 +65,7 @@ describe Api::V3::NoticesController, type: :controller do
   end
 
   it "responds with 422 when project_id is invalid" do
-    post :create, legit_body, project_id: "hm?", key: "wha?"
+    post :create, body: legit_body, params: { project_id: "hm?", key: "wha?" }
 
     expect(response.status).to eq(422)
     expect(response.body).to eq("Your API key is unknown")

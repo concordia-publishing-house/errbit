@@ -42,7 +42,7 @@ describe "problems/show.html.haml" do
     it "should not confirm the 'resolve' link if configured not to" do
       Errbit::Config.stub(:confirm_err_actions).and_return(false)
       render
-      expect(action_bar).to have_selector('a.resolve[data-confirm="null"]')
+      expect(action_bar).to have_selector('a.resolve:not([data-confirm])')
     end
 
     it "should link 'up' to HTTP_REFERER if is set" do

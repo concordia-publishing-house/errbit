@@ -1,4 +1,4 @@
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   PER_PAGE = 30
 
   devise *Errbit::Config.devise_modules

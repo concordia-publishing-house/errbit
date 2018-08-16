@@ -1,6 +1,6 @@
 require 'recurse'
 
-class Notice < ActiveRecord::Base
+class Notice < ApplicationRecord
 
   serialize :server_environment, Hash
   serialize :request, Hash

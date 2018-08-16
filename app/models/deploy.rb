@@ -1,4 +1,4 @@
-class Deploy < ActiveRecord::Base
+class Deploy < ApplicationRecord
 
   belongs_to :app, inverse_of: :deploys
 

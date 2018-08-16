@@ -270,6 +270,7 @@ describe AppsController do
           @app.reload
           expect(@app.email_at_notices).to eq [1, 4, 7, 8, 10]
         end
+
         context "failed parsing of CSV" do
           it "should set the default value" do
             @app = Fabricate(:app, email_at_notices: [1, 2, 3, 4])
@@ -393,4 +394,3 @@ describe AppsController do
   end
 
 end
-

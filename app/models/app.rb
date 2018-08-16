@@ -1,4 +1,4 @@
-class App < ActiveRecord::Base
+class App < ApplicationRecord
   include Comparable
 
   serialize :email_at_notices, Array

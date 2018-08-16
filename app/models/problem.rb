@@ -2,7 +2,7 @@
 # reported as various Errs, but the user has grouped the
 # Errs together as belonging to the same problem.
 
-class Problem < ActiveRecord::Base
+class Problem < ApplicationRecord
   acts_as_paranoid
 
   serialize :messages, Hash
