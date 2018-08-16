@@ -1,4 +1,4 @@
-class ResetProblemNoticeCounts < ActiveRecord::Migration
+class ResetProblemNoticeCounts < ActiveRecord::Migration[4.2]
   def up
     require "progressbar"
     pbar = ProgressBar.new("problems", Problem.count)

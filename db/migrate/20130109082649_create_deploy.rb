@@ -1,4 +1,4 @@
-class CreateDeploy < ActiveRecord::Migration
+class CreateDeploy < ActiveRecord::Migration[4.2]
   def change
     create_table :deploys do |t|
       t.string :username

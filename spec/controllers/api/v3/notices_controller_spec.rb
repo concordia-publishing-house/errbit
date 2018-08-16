@@ -4,12 +4,10 @@ describe Api::V3::NoticesController do
   let(:app) { Fabricate(:app) }
   let(:project_id) { app.api_key }
   let(:legit_params) { { project_id: project_id, key: project_id } }
-  let(:legit_body) do
-    Rails.root.join("spec", "fixtures", "api_v3_request.json").read
-  end
+  let(:legit_body) { Rails.root.join("spec", "fixtures", "api_v3_request.json").read }
 
   it "sets CORS headers on POST request" do
-    post :create, project_id: "invalid id"
+    post :create, params: { project_id: "invalid id" }
     expect(response.headers["Access-Control-Allow-Origin"]).to eq("*")
     expect(response.headers["Access-Control-Allow-Headers"]).to eq("origin, content-type, accept")
   end
@@ -59,7 +57,7 @@ describe Api::V3::NoticesController do
   it "responds with 400 when request attributes are not valid" do
     allow_any_instance_of(AirbrakeApi::V3::NoticeParser)
       .to receive(:report).and_raise(AirbrakeApi::ParamsError)
-    post :create, project_id: "ID"
+    post :create, params: { project_id: "ID" }
     expect(response.status).to eq(400)
     expect(response.body).to eq("Invalid request")
   end

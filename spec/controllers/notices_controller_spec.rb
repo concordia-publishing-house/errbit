@@ -30,7 +30,7 @@ describe NoticesController do
       end
 
       it "generates a notice from xml in a data param [POST]" do
-        post :create, data: xml, format: :xml
+        post :create, body: xml, format: :xml
         expect(response).to be_success
         # Same RegExp from Airbrake::Sender#send_to_airbrake (https://github.com/airbrake/airbrake/blob/master/lib/airbrake/sender.rb#L53)
         # Inspired by https://github.com/airbrake/airbrake/blob/master/test/sender_test.rb
@@ -39,7 +39,7 @@ describe NoticesController do
       end
 
       it "generates a notice from xml [GET]" do
-        get :create, data: xml, format: :xml
+        get :create, body: xml, format: :xml
         expect(response).to be_success
         expect(response.body).to match(%r{<id[^>]*>#{notice.id}</id>})
         expect(response.body).to match(%r{<url[^>]*>(.+)#{locate_path(notice.id)}</url>})
@@ -48,7 +48,7 @@ describe NoticesController do
       context "with an invalid API_KEY" do
         let(:error_report) { double(:valid? => false) }
         it 'return 422' do
-          post :create, format: :xml, data: xml
+          post :create, format: :xml, body: xml
           expect(response.status).to eq 422
         end
       end
@@ -73,7 +73,7 @@ describe NoticesController do
       it "should locate notice and redirect to problem" do
         problem = Fabricate(:problem, app: app, environment: "production")
         notice = Fabricate(:notice, err: Fabricate(:err, problem: problem))
-        get :locate, id: notice.id
+        get :locate, params: { id: notice.id }
         expect(response).to redirect_to(app_err_path(problem.app, problem))
       end
     end

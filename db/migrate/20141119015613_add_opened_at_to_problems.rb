@@ -1,4 +1,4 @@
-class AddOpenedAtToProblems < ActiveRecord::Migration
+class AddOpenedAtToProblems < ActiveRecord::Migration[4.2]
   def up
     add_column :problems, :opened_at, :timestamp
     execute "UPDATE problems SET opened_at=created_at"

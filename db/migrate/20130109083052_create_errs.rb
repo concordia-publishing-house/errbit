@@ -1,4 +1,4 @@
-class CreateErrs < ActiveRecord::Migration
+class CreateErrs < ActiveRecord::Migration[4.2]
   def change
     create_table :errs do |t|
       t.integer :problem_id

@@ -23,7 +23,7 @@ module DataMigration
     worker.start
   end
 
-  class DBPrepareMigration < ActiveRecord::Migration
+  class DBPrepareMigration < ActiveRecord::Migration[4.2]
     self.verbose = false
 
     def change

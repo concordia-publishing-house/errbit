@@ -18,7 +18,7 @@ class Api::V3::NoticesController < ApplicationController
     merged_params["key"] = authorization_token if authorization_token
     report = AirbrakeApi::V3::NoticeParser.new(merged_params).report
 
-    return render text: UNKNOWN_API_KEY, status: 422 unless report.valid?
+    return render plain: UNKNOWN_API_KEY, status: 422 unless report.valid?
 
     report.generate_notice!
     render status: 201, json: {
@@ -26,7 +26,7 @@ class Api::V3::NoticesController < ApplicationController
       url: app_problem_url(report.problem.app, report.problem)
     }
   rescue AirbrakeApi::ParamsError
-    render text: "Invalid request", status: 400
+    render plain: "Invalid request", status: 400
   end
 
 private

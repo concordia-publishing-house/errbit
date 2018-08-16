@@ -1,4 +1,4 @@
-class CreateBacktraces < ActiveRecord::Migration
+class CreateBacktraces < ActiveRecord::Migration[4.2]
   def change
     create_table :backtraces do |t|
       t.string :fingerprint

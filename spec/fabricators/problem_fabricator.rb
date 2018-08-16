@@ -15,7 +15,7 @@ Fabricator(:problem_with_comments, from: :problem_with_err) do
     3.times do
       Fabricate(:comment, err: err)
     end
-    problem.comments(true)
+    problem.comments.reload
   end
 end
 

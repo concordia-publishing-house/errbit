@@ -1,4 +1,4 @@
-class CreateBacktraceLines < ActiveRecord::Migration
+class CreateBacktraceLines < ActiveRecord::Migration[4.2]
   def change
     create_table :backtrace_lines do |t|
       t.integer :backtrace_id

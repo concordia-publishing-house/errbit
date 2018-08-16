@@ -48,7 +48,7 @@ describe CommentsController do
       let(:comment) { problem.reload.comments.first }
 
       before(:each) do
-        delete :destroy, app_id: problem.app.id, err_id: err.id, id: comment.id.to_s
+        delete :destroy, params: { app_id: problem.app.id, err_id: err.id, id: comment.id.to_s }
         problem.reload
       end
 

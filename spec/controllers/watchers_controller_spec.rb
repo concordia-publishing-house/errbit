@@ -4,7 +4,6 @@ describe WatchersController do
   let(:app) { Fabricate(:app_with_user_watcher) }
 
   describe "DELETE /apps/:app_id/watchers/:id/destroy" do
-
     context "with admin user" do
       before(:each) do
         sign_in Fabricate(:admin)
@@ -15,7 +14,7 @@ describe WatchersController do
         let(:watcher) { app.watchers.first }
 
         before(:each) do
-          delete :destroy, app_id: app.id, id: watcher.user.id.to_s
+          delete :destroy, params: { app_id: app.id, id: watcher.user.id.to_s }
         end
 
         it "should delete the watcher" do

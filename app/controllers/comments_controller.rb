@@ -1,8 +1,8 @@
 class CommentsController < ApplicationController
   include UrlHelper
 
-  before_filter :find_app
-  before_filter :find_err
+  before_action :find_app
+  before_action :find_err
 
   def create
     @comment = Comment.create(params.require(:comment).permit!.merge(user: current_user, err: @err))

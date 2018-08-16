@@ -1,4 +1,4 @@
-class RefingerprintErrs < ActiveRecord::Migration
+class RefingerprintErrs < ActiveRecord::Migration[4.2]
   def up
     require "refingerprint_errs"
     RefingerprintErrs.execute

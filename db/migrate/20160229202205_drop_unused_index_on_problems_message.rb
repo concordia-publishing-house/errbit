@@ -1,4 +1,4 @@
-class DropUnusedIndexOnProblemsMessage < ActiveRecord::Migration
+class DropUnusedIndexOnProblemsMessage < ActiveRecord::Migration[4.2]
   def up
     remove_index :problems, :message
   end
