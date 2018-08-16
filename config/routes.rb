@@ -2,11 +2,6 @@ Errbit::Application.routes.draw do
 
   devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
 
-  # Hoptoad Notifier Routes
-  match '/notifier_api/v2/notices' => 'notices#create', via: [:get, :post]
-  get '/locate/:id' => 'notices#locate', as: :locate
-  post '/deploys.txt' => 'deploys#create'
-
   resources :notices,   only: [:show]
   resources :deploys,   only: [:show]
   resources :users do
@@ -67,8 +62,23 @@ Errbit::Application.routes.draw do
     end
   end
 
-  match '/api/v3/projects/:project_id/create-notice' => 'api/v3/notices#create', via: [:post]
-  match '/api/v3/projects/:project_id/notices' => 'api/v3/notices#create', via: [:post, :options]
+
+
+  # Hoptoad Notifier API
+  match '/notifier_api/v2/notices' => 'notices#create', via: [:get, :post]
+  get '/locate/:id' => 'notices#locate', as: :locate
+  post '/deploys.txt' => 'deploys#create'
+
+  # Airbrake Notifier API
+
+  namespace :api do
+    namespace :v3 do
+      post '/projects/:project_id/create-notice' => 'notices#create'
+      match '/projects/:project_id/notices' => 'notices#create', via: [:post, :options]
+    end
+  end
+
+
 
   root to: 'apps#index'
 
