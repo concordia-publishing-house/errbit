@@ -7,12 +7,8 @@ Fabricator :issue_tracker do
   password "password"
 end
 
-%w(lighthouse pivotal_labs fogbugz).each do |t|
+%w(pivotal_labs fogbugz).each do |t|
   Fabricator "#{t}_tracker".to_sym, from: :issue_tracker, class_name: "IssueTrackers::#{t.camelcase}Tracker"
-end
-
-Fabricator :redmine_tracker, from: :issue_tracker, class_name: "IssueTrackers::RedmineTracker" do
-  account 'http://redmine.example.com'
 end
 
 Fabricator :gitlab_tracker, from: :issue_tracker, class_name: "IssueTrackers::GitlabTracker" do

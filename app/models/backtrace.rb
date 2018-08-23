@@ -1,4 +1,4 @@
-class Backtrace < ActiveRecord::Base
+class Backtrace < ApplicationRecord
 
   has_many :notices
   has_one :notice

@@ -1,36 +1,38 @@
 source 'https://rubygems.org'
 
+git_source(:github) do |repo_name|
+  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
+  "https://github.com/#{repo_name}.git"
+end
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.2.8'
+gem 'rails', '~> 5.0.7'
 
 gem 'pg'
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 4.0.3'
+gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
-# Use CoffeeScript for .js.coffee assets and views
-gem 'coffee-rails', '~> 4.0.0'
+# Use CoffeeScript for .coffee assets and views
+gem 'coffee-rails', '~> 4.2'
+# See https://github.com/rails/execjs#readme for more supported runtimes
+gem 'therubyracer', platforms: :ruby # C Ruby (MRI) or Rubinius, but NOT Windows
 
-# We can't upgrade because not compatible to jquery >= 1.9.
-# To do that, we need fix the rails.js
-gem 'jquery-rails', '~> 2.1.4'
+gem 'jquery-rails'
 gem 'pjax_rails'
 gem 'underscore-rails'
 
-# See https://github.com/rails/execjs#readme for more supported runtimes
-gem 'therubyracer', platform: :ruby  # C Ruby (MRI) or Rubinius, but NOT Windows
-
-gem 'devise'
+gem 'devise', '~> 4.4.3'
 gem 'haml'
 gem 'htmlentities'
-gem 'rack-ssl', require: 'rack/ssl'   # force SSL
+gem 'rack-ssl', require: 'rack/ssl' # force SSL
 gem 'rack-utf8_sanitizer', require: 'rack/utf8_sanitizer'
 
 gem "paranoia", "~> 2.0"
 gem 'useragent'
 gem 'decent_exposure'
-gem 'mail', '2.6.6'
+gem 'mail'
 gem 'actionmailer_inline_css'
 gem 'kaminari', '>= 0.14.1'
 gem 'rack-ssl-enforcer', require: false
@@ -38,10 +40,12 @@ gem 'fabrication'
 gem 'rails_autolink'
 gem 'redcarpet', '~> 3.3.4'
 gem 'gemoji', '~> 2.1.0'
-gem 'progressbar', require: false
+gem 'progressbar', '~> 0.21.0', require: false
 # Please don't update hoptoad_notifier to airbrake.
 # It's for internal use only, and we monkeypatch certain methods
 gem 'hoptoad_notifier', "~> 2.4"
+
+gem 'activemodel-serializers-xml'
 
 # Need for mongodb data import
 gem 'mongo', require: false
@@ -52,40 +56,36 @@ gem 'bson_ext', require: false
 
 # Issue Trackers
 # ---------------------------------------
-# Lighthouse
-gem 'lighthouse-api'
-# Redmine
-gem 'oruen_redmine_client', require: 'redmine_client'
+# Used by Mingle and Unfuddle
+gem 'activeresource' #, '~> 4.0.0'
 # Pivotal Tracker
-gem 'pivotal-tracker'
+gem 'pivotal-tracker', '~> 0.5.13'
 # Fogbugz
-gem 'ruby-fogbugz', require: 'fogbugz'
+gem 'ruby-fogbugz', '~> 0.1.1', require: 'fogbugz'
 # Github Issues
-gem 'octokit'
+gem 'octokit', '~> 3.7.0'
 # Gitlab
 gem 'gitlab', '~> 3.0.0'
-
 # Bitbucket Issues
-gem 'bitbucket_rest_api', require: false
-
+gem 'bitbucket_rest_api', '~> 0.1.7', require: false
 # Jira
-gem 'jira-ruby', require: 'jira'
+gem 'jira-ruby', '~> 0.1.2', require: 'jira'
 
 # Notification services
 # ---------------------------------------
-gem 'campy'
+gem 'campy', '~> 1.0.0'
 # Hipchat
-gem 'hipchat'
+gem 'hipchat', '~> 0.12.0'
 # Google Talk
-gem 'xmpp4r', require: ["xmpp4r", "xmpp4r/muc"]
+gem 'xmpp4r', '~> 0.5.5', require: ["xmpp4r", "xmpp4r/muc"]
 # Hoiio (SMS)
 gem 'hoi'
 # Pushover (iOS Push notifications)
-gem 'rushover'
+gem 'rushover', '~> 0.3.0'
 # Hubot
 gem 'httparty'
 # Flowdock
-gem 'flowdock'
+gem 'flowdock', '~> 0.3.1'
 
 # Authentication
 # ---------------------------------------
@@ -104,11 +104,11 @@ group :development, :test do
   gem 'rspec-its'
   gem 'rspec-activemodel-mocks'
   gem 'webmock', require: false
-  gem 'airbrake', require: false
+  gem 'airbrake', '~> 3.1.14', require: false
   gem 'pry-rails'
 #  gem 'rpm_contrib'
 #  gem 'newrelic_rpm'
-  gem 'quiet_assets'
+  gem 'rails-controller-testing'
 end
 
 group :development do
@@ -130,7 +130,6 @@ group :test do
   gem 'database_cleaner'
   gem 'email_spec', '~> 1.5.0'
   gem 'timecop'
-  gem 'test_after_commit'
   gem 'coveralls', require: false
 end
 

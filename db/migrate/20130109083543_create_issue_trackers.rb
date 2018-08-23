@@ -1,4 +1,4 @@
-class CreateIssueTrackers < ActiveRecord::Migration
+class CreateIssueTrackers < ActiveRecord::Migration[4.2]
   def change
     create_table :issue_trackers do |t|
       t.integer :app_id

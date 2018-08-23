@@ -1,8 +1,8 @@
-class BacktraceLine < ActiveRecord::Base
+class BacktraceLine < ApplicationRecord
   IN_APP_PATH = %r{^\[PROJECT_ROOT\](?!(\/vendor))/?}
   GEMS_PATH   = %r{\[GEM_ROOT\]\/gems\/([^\/]+)}
 
-  belongs_to :backtrace
+  belongs_to :backtrace, optional: true
 
   def self.in_app
     where("file ~ '^\\[PROJECT_ROOT\\](?!(/vendor))/?'")
@@ -36,4 +36,3 @@ class BacktraceLine < ActiveRecord::Base
   end
 
 end
-

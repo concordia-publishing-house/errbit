@@ -1,4 +1,4 @@
-class IssueTracker < ActiveRecord::Base
+class IssueTracker < ApplicationRecord
 
   include HashHelper
   include Rails.application.routes.url_helpers

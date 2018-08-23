@@ -17,7 +17,7 @@ describe DeploysController do
 
     it 'finds the app via the api key' do
       expect(App).to receive(:find_by_api_key!).with('APIKEY').and_return(@app)
-      post :create, deploy: @params, api_key: 'APIKEY'
+      post :create, params: { deploy: @params, api_key: 'APIKEY' }
     end
 
     it 'creates a deploy' do
@@ -31,11 +31,11 @@ describe DeploysController do
           message:      'johns first deploy'
 
         }).and_return(Fabricate(:deploy))
-      post :create, deploy: @params, api_key: 'APIKEY'
+      post :create, params: { deploy: @params, api_key: 'APIKEY' }
     end
 
     it 'sends an email notification when configured to do so' do
-      post :create, deploy: @params, api_key: 'APIKEY'
+      post :create, params: { deploy: @params, api_key: 'APIKEY' }
       email = ActionMailer::Base.deliveries.last
       expect(email.to).to include(@app.watchers.first.email)
       expect(email.subject).to eq "[#{@app.name}] Deployed to production by john.doe"
@@ -47,7 +47,7 @@ describe DeploysController do
     before(:each) do
       @deploy = Fabricate :deploy
       sign_in Fabricate(:admin)
-      get :index, app_id: @deploy.app.id
+      get :index, params: { app_id: @deploy.app.id }
     end
 
     it "should render successfully" do
@@ -61,4 +61,3 @@ describe DeploysController do
   end
 
 end
-

@@ -1,4 +1,4 @@
-class CacheHostAndUserAgentOnNotice < ActiveRecord::Migration
+class CacheHostAndUserAgentOnNotice < ActiveRecord::Migration[4.2]
   def up
     add_column :notices, :host, :string
     add_column :notices, :user_agent_string, :string

@@ -53,7 +53,7 @@ describe Backtrace do
     it "should return backtrace lines in the order they were received" do
       lines = (1..100).map { |i| line("[GEM_ROOT]/gems/activerecord-4.0.3/lib/active_record/relation.rb", i) }
       backtrace = Backtrace.create!(raw: lines)
-      expect(backtrace.lines(true).pluck(:number)).to eq((1..100).to_a)
+      expect(backtrace.lines.reload.pluck(:number)).to eq((1..100).to_a)
     end
   end
 

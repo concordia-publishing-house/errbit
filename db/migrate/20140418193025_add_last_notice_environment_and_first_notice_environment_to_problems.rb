@@ -1,4 +1,4 @@
-class AddLastNoticeEnvironmentAndFirstNoticeEnvironmentToProblems < ActiveRecord::Migration
+class AddLastNoticeEnvironmentAndFirstNoticeEnvironmentToProblems < ActiveRecord::Migration[4.2]
   def up
     add_column :problems, :first_notice_environment, :string
     add_column :problems, :last_notice_environment, :string

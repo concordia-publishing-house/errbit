@@ -30,20 +30,20 @@ class ProblemDestroy
 private
 
   def errs_id
-    @errs_id ||= problem.errs.pluck(:id)
+    @errs_id ||= problem.errs.all.pluck(:id)
   end
 
   def comments_id
-    @comments_id ||= problem.comments.pluck(:id)
+    @comments_id ||= problem.comments.all.pluck(:id)
   end
 
   def delete_errs
-    Notice.delete_all(err_id: errs_id)
-    Err.delete_all(id: errs_id)
+    Notice.where(err_id: errs_id).delete_all
+    Err.where(id: errs_id).delete_all
   end
 
   def delete_comments
-    Comment.delete_all(id: comments_id)
+    Comment.where(id: comments_id).delete_all
   end
 
 end

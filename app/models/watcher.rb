@@ -1,8 +1,8 @@
-class Watcher < ActiveRecord::Base
+class Watcher < ApplicationRecord
 
 
   belongs_to :app, inverse_of: :watchers
-  belongs_to :user
+  belongs_to :user, optional: true
 
   validate :ensure_user_or_email
 
@@ -38,4 +38,3 @@ class Watcher < ActiveRecord::Base
     end
 
 end
-

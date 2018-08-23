@@ -12,12 +12,13 @@ class Api::V3::NoticesController < ApplicationController
     response.headers["Access-Control-Allow-Headers"] = "origin, content-type, accept"
     return render(status: 200, text: "") if request.method == "OPTIONS"
 
-    merged_params = params.merge(!request.raw_post.empty? && JSON.parse(request.raw_post) || {})
+    merged_params = params.permit(:key, :project_id, :notifier, :environment, :session, :context, :errors).to_h
+    merged_params.merge!(JSON.parse(request.raw_post)) unless request.raw_post.empty?
     merged_params["key"] = request.headers["X-Airbrake-Token"] if request.headers["X-Airbrake-Token"]
     merged_params["key"] = authorization_token if authorization_token
     report = AirbrakeApi::V3::NoticeParser.new(merged_params).report
 
-    return render text: UNKNOWN_API_KEY, status: 422 unless report.valid?
+    return render plain: UNKNOWN_API_KEY, status: 422 unless report.valid?
 
     report.generate_notice!
     render status: 201, json: {
@@ -25,7 +26,7 @@ class Api::V3::NoticesController < ApplicationController
       url: app_problem_url(report.problem.app, report.problem)
     }
   rescue AirbrakeApi::ParamsError
-    render text: "Invalid request", status: 400
+    render plain: "Invalid request", status: 400
   end
 
 private

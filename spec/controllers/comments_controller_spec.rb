@@ -17,13 +17,16 @@ describe CommentsController do
       let(:user) { Fabricate(:user) }
 
       before(:each) do
-        post :create, app_id: problem.app.id, err_id: err.id,
-             comment: { body: "One test comment", user_id: user.id }
-        problem.reload
+        post :create, params: {
+          app_id: problem.app.id,
+          err_id: err.id,
+          comment: {
+            body: "One test comment",
+            user_id: user.id } }
       end
 
       it "should create the comment" do
-        expect(problem.comments.size).to eq 1
+        expect(problem.comments.count).to eq 1
       end
 
       it "should redirect to problem page" do
@@ -45,7 +48,7 @@ describe CommentsController do
       let(:comment) { problem.reload.comments.first }
 
       before(:each) do
-        delete :destroy, app_id: problem.app.id, err_id: err.id, id: comment.id.to_s
+        delete :destroy, params: { app_id: problem.app.id, err_id: err.id, id: comment.id.to_s }
         problem.reload
       end
 

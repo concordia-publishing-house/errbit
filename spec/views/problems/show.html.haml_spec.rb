@@ -42,7 +42,7 @@ describe "problems/show.html.haml" do
     it "should not confirm the 'resolve' link if configured not to" do
       Errbit::Config.stub(:confirm_err_actions).and_return(false)
       render
-      expect(action_bar).to have_selector('a.resolve[data-confirm="null"]')
+      expect(action_bar).to have_selector('a.resolve:not([data-confirm])')
     end
 
     it "should link 'up' to HTTP_REFERER if is set" do
@@ -98,9 +98,9 @@ describe "problems/show.html.haml" do
 
       end
 
-      context "with lighthouse tracker on app" do
+      context "with pivotal_labs tracker on app" do
         let(:app) { Fabricate :app, issue_tracker: tracker }
-        let(:tracker) { Fabricate :lighthouse_tracker }
+        let(:tracker) { Fabricate :pivotal_labs_tracker }
         context "with problem without issue link" do
           let(:problem) { Fabricate(:err, problem: Fabricate(:problem, app: app)).problem }
           it 'not see link if no issue tracker' do
@@ -165,4 +165,3 @@ describe "problems/show.html.haml" do
     end
   end
 end
-

@@ -1,14 +1,12 @@
 class CommentsController < ApplicationController
   include UrlHelper
 
-  before_filter :find_app
-  before_filter :find_err
+  before_action :find_app
+  before_action :find_err
 
   def create
-    @comment = Comment.new(params.require(:comment).permit!.merge(user_id: current_user.id))
-    if @comment.valid?
-      @err.comments << @comment
-      @err.save
+    @comment = Comment.create(params.require(:comment).permit!.merge(user: current_user, err: @err))
+    if @comment.persisted?
       flash[:success] = "Comment saved!"
     else
       flash[:error] = "I'm sorry, your comment was blank! Try again?"

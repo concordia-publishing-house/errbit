@@ -1,4 +1,4 @@
-class CreateNotificationServices < ActiveRecord::Migration
+class CreateNotificationServices < ActiveRecord::Migration[4.2]
   def change
     create_table :notification_services do |t|
       t.integer :app_id

@@ -1,4 +1,4 @@
-class CreateWatchers < ActiveRecord::Migration
+class CreateWatchers < ActiveRecord::Migration[4.2]
   def change
     create_table :watchers do |t|
       t.integer :app_id

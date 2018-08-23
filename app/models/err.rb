@@ -2,7 +2,7 @@
 # determined to refer to the same Error (Errbit groups
 # notices into errs by a notice's fingerprint.)
 
-class Err < ActiveRecord::Base
+class Err < ApplicationRecord
 
   belongs_to :problem, inverse_of: :errs
   has_many :notices, inverse_of: :err, dependent: :destroy

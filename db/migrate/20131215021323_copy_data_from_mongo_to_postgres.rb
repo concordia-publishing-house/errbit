@@ -1,4 +1,4 @@
-class CopyDataFromMongoToPostgres < ActiveRecord::Migration
+class CopyDataFromMongoToPostgres < ActiveRecord::Migration[4.2]
   def up
     require 'data_migration'
     DataMigration.start(configuration) if configuration && configuration.fetch(:sessions, {}).key?(:default)

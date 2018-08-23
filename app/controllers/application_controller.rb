@@ -3,9 +3,9 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  before_filter :authenticate_user_from_token!
-  before_filter :authenticate_user!
-  before_filter :set_time_zone
+  before_action :authenticate_user_from_token!
+  before_action :authenticate_user!
+  before_action :set_time_zone
 
   # Devise override - After login, if there is only one app,
   # redirect to that app's path instead of the root path (apps#index).
@@ -15,17 +15,6 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from ActionController::RedirectBackError, with: :redirect_to_root
-
-  class StrongParametersWithEagerAttributesStrategy < DecentExposure::StrongParametersStrategy
-    def attributes
-      super
-      @attributes ||= params[inflector.param_key] ? params[inflector.param_key].permit! : {}
-    end
-  end
-
-  decent_configuration do
-    strategy StrongParametersWithEagerAttributesStrategy
-  end
 
 protected
 

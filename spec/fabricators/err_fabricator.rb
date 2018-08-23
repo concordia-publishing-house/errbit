@@ -22,8 +22,8 @@ Fabricator :backtrace do
 end
 
 Fabricator :backtrace_line do
+  backtrace { Backtrace.create! }
   number { rand(999) }
   file { "/path/to/file/#{SecureRandom.hex(4)}.rb" }
   method(:method) { ActiveSupport.methods.shuffle.first }
 end
-

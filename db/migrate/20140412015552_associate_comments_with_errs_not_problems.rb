@@ -1,4 +1,4 @@
-class AssociateCommentsWithErrsNotProblems < ActiveRecord::Migration
+class AssociateCommentsWithErrsNotProblems < ActiveRecord::Migration[4.2]
   def up
     add_column :comments, :err_id, :integer
     add_index :comments, :err_id

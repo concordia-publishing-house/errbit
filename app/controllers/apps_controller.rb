@@ -2,9 +2,9 @@ class AppsController < ApplicationController
 
   include ProblemsSearcher
 
-  before_filter :require_admin!, except: [:index, :show]
-  before_filter :parse_email_at_notices_or_set_default, only: [:create, :update]
-  before_filter :parse_notice_at_notices_or_set_default, only: [:create, :update]
+  before_action :require_admin!, except: [:index, :show]
+  before_action :parse_email_at_notices_or_set_default, only: [:create, :update]
+  before_action :parse_notice_at_notices_or_set_default, only: [:create, :update]
   respond_to :html
 
   expose(:app_scope) {
@@ -15,7 +15,7 @@ class AppsController < ApplicationController
     app_scope.all.sort.to_a
   }
 
-  expose(:app, ancestor: :app_scope)
+  expose(:app, scope: -> { app_scope })
 
   expose(:all_errs) {
     !!params[:all_errs]
@@ -35,6 +35,8 @@ class AppsController < ApplicationController
   expose(:deploys) {
     app.deploys.by_created_at.limit(5)
   }
+
+  expose(:app_params) { params.fetch(:app, {}).permit! }
 
   def index; end
   def show
@@ -59,7 +61,7 @@ class AppsController < ApplicationController
   def update
     initialize_subclassed_issue_tracker
     initialize_subclassed_notification_service
-    if app.save
+    if app.update_attributes(app_params)
       redirect_to app_url(app), flash: { success: I18n.t('controllers.apps.flash.update.success') }
     else
       flash[:error] = I18n.t('controllers.apps.flash.update.error')
@@ -89,18 +91,18 @@ class AppsController < ApplicationController
 
     def initialize_subclassed_issue_tracker
       # set the app's issue tracker
-      if params[:app][:issue_tracker_attributes] && tracker_type = params[:app][:issue_tracker_attributes][:type]
+      if app_params[:issue_tracker_attributes] && tracker_type = app_params[:issue_tracker_attributes][:type]
         if IssueTracker.subclasses.map(&:name).concat(["IssueTracker"]).include?(tracker_type)
-          app.issue_tracker = tracker_type.constantize.new(params[:app][:issue_tracker_attributes])
+          app.issue_tracker = tracker_type.constantize.new(app_params[:issue_tracker_attributes])
         end
       end
     end
 
     def initialize_subclassed_notification_service
       # set the app's notification service
-      if params[:app][:notification_service_attributes] && notification_type = params[:app][:notification_service_attributes][:type]
+      if app_params[:notification_service_attributes] && notification_type = app_params[:notification_service_attributes][:type]
         if NotificationService.subclasses.map(&:name).concat(["NotificationService"]).include?(notification_type)
-          app.notification_service = notification_type.constantize.new(params[:app][:notification_service_attributes])
+          app.notification_service = notification_type.constantize.new(app_params[:notification_service_attributes])
         end
       end
     end
@@ -114,30 +116,30 @@ class AppsController < ApplicationController
 
     # email_at_notices is edited as a string, and stored as an array.
     def parse_email_at_notices_or_set_default
-      if params[:app] && val = params[:app][:email_at_notices]
+      if val = app_params[:email_at_notices]
         # Sanitize negative values, split on comma,
         # strip, parse as integer, remove all '0's.
         # If empty, set as default and show an error message.
         email_at_notices = val.gsub(/-\d+/,"").split(",").map { |v| v.strip.to_i }.reject { |v| v == 0 }
         if email_at_notices.any?
-          params[:app][:email_at_notices] = email_at_notices
+          app_params[:email_at_notices] = email_at_notices
         else
-          default_array = params[:app][:email_at_notices] = Errbit::Config.email_at_notices
+          default_array = app_params[:email_at_notices] = Errbit::Config.email_at_notices
           flash[:error] = "Couldn't parse your notification frequency. Value was reset to default (#{default_array.join(', ')})."
         end
       end
     end
 
     def parse_notice_at_notices_or_set_default
-      if params[:app][:notification_service_attributes] && val = params[:app][:notification_service_attributes][:notify_at_notices]
+      if app_params[:notification_service_attributes] && val = app_params[:notification_service_attributes][:notify_at_notices]
         # Sanitize negative values, split on comma,
         # strip, parse as integer, remove all '0's.
         # If empty, set as default and show an error message.
         notify_at_notices = val.gsub(/-\d+/,"").split(",").map { |v| v.strip.to_i }
         if notify_at_notices.any?
-          params[:app][:notification_service_attributes][:notify_at_notices] = notify_at_notices
+          app_params[:notification_service_attributes][:notify_at_notices] = notify_at_notices
         else
-          default_array = params[:app][:notification_service_attributes][:notify_at_notices] = Errbit::Config.notify_at_notices
+          default_array = app_params[:notification_service_attributes][:notify_at_notices] = Errbit::Config.notify_at_notices
           flash[:error] = "Couldn't parse your notification frequency. Value was reset to default (#{default_array.join(', ')})."
         end
       end

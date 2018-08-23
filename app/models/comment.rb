@@ -1,4 +1,4 @@
-class Comment < ActiveRecord::Base
+class Comment < ApplicationRecord
 
   after_create :increase_counter_cache
   before_destroy :decrease_counter_cache
@@ -6,7 +6,7 @@ class Comment < ActiveRecord::Base
   after_create :deliver_email, if: :emailable?
 
   belongs_to :err
-  belongs_to :user
+  belongs_to :user, optional: true
   delegate   :app, :problem, to: :err
 
   validates_presence_of :body
