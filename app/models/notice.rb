@@ -154,8 +154,8 @@ class Notice < ApplicationRecord
   end
 
   def sanitize
-    [:server_environment, :request, :notifier].each do |h|
-      send("#{h}=",sanitize_hash(send(h)))
+    %i{server_environment request notifier user_attributes current_user}.each do |h|
+      public_send "#{h}=", sanitize_hash(public_send(h))
     end
   end
 
@@ -223,4 +223,3 @@ private
   end
 
 end
-
