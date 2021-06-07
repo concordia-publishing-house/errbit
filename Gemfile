@@ -23,7 +23,7 @@ gem 'jquery-rails'
 gem 'pjax_rails'
 gem 'underscore-rails'
 
-gem 'devise', '~> 4.4.3'
+gem 'devise', '~> 4.8.0'
 gem 'haml'
 gem 'htmlentities'
 gem 'rack-ssl', require: 'rack/ssl' # force SSL
@@ -48,8 +48,8 @@ gem 'hoptoad_notifier', "~> 2.4"
 gem 'activemodel-serializers-xml'
 
 # Need for mongodb data import
-gem 'mongo', require: false
-gem 'bson_ext', require: false
+# gem 'mongo', require: false
+# gem 'bson_ext', require: false
 
 # Remove / comment out any of the gems below if you want to disable
 # a given issue tracker, notification service, or authentication.
@@ -90,7 +90,8 @@ gem 'flowdock', '~> 0.3.1'
 # Authentication
 # ---------------------------------------
 # GitHub OAuth
-gem 'omniauth-github', "1.2.0"
+gem 'omniauth-github'
+gem 'omniauth-rails_csrf_protection'
 
 gem 'ri_cal'
 gem 'oj'
