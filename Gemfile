@@ -48,8 +48,8 @@ gem 'hoptoad_notifier', "~> 2.4"
 gem 'activemodel-serializers-xml'
 
 # Need for mongodb data import
-# gem 'mongo', require: false
-# gem 'bson_ext', require: false
+gem 'mongo', require: false
+gem 'bson_ext', ">= 1.12.5", require: false
 
 # Remove / comment out any of the gems below if you want to disable
 # a given issue tracker, notification service, or authentication.
